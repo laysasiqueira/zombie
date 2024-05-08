@@ -9,7 +9,7 @@ canvas.height = window.innerHeight;
 
 //elemento  img e fundo
 let img = new Image();
-img.src = 'images/back.jpg'; 
+img.src = 'images/bg.jpg'; 
 img.onload = function() {
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 };
