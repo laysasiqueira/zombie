@@ -22,7 +22,7 @@ window.addEventListener('resize', function() {
 });
 //zombie
 let zombie = new Image();
-zombie.src = "img/zombie.jpg";
+zombie.src = "img/zombie.png";
 let numSprite = 0;
 let posIniX = 0;
 let Limage = 0;
