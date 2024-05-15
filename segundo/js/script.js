@@ -47,7 +47,7 @@ posIniX = largSprite * numSprite;
 
     ctx.drawImage(zombie, posIniX, 0, largSprite, altSprite, posX, posY, largSprite, altSprite)}, 200);
 
-window.addEventListener('keydown', (event)=>{
+/**window.addEventListener('keydown', (event)=>{
     //seta para a esquerda
     if(event.keyCode==37){
         posX-=velocidade
@@ -64,4 +64,4 @@ window.addEventListener('keydown', (event)=>{
     else(event.keyCode==40){
         posY+=velocidade
     }
-})
+})**/
