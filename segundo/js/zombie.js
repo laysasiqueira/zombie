@@ -2,7 +2,7 @@ let canvas = document.getElementById('jogoCanvas');
 let ctx = canvas.getContext('2d');
 
 let zombie = new Image();
-zombie.src = "img/zombie.jpg";
+zombie.src = "img/zombie.png";
 let numSprite = 0;
 let posIniX = 0;
 let Limage = 0;
