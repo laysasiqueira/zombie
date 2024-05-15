@@ -1,67 +1,55 @@
-
- // buscar elemento canvas
-let canvas = document.getElementById('jogoCanvas');
-let ctx = canvas.getContext('2d');
-
-// de cordo com tamanho de window
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-//elemento  img e fundo
-let img = new Image();
-img.src = 'img/bg.jpg'; 
-img.onload = function() {
+function drawBackground(ctx, img, canvas) {
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-};
+}
 
-//mudar tamanho de window de acordo com dispositivo
-window.addEventListener('resize', function() {
+function resizeCanvas(canvas) {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-});
-//zombie
-let zombie = new Image();
-zombie.src = "img/zombie.png";
-let numSprite = 0;
-let posIniX = 0;
-let Limage = 0;
-let largSprite = 0;
-let numSpries = 4;
-let posX = 0;
-let posY = 0;
-let velocidade = 3;
-zombie.addEventListener('load', ()=>{
-    largSprite = zombie.width / numSpries;
-    altSprite = zombie.height / numSpries;
-    posIniX = largSprite * numSprite;
-    ctx.drawImage(zombie, posIniX, 0, largSprite, altSprite, posX, posY, largSprite, altSprite)
-});
+}
 
-let anima = setInterval(()=>{
+function drawSprite(ctx, img, posIniX, altSprite, largSprite, numSprite) {
     ctx.clearRect(0, 0, 100, 100);
-    numSprite++
-if(numSprite>3)
-    numSprite = 0
-posIniX = largSprite * numSprite;
+    posIniX = largSprite * numSprite;
+    ctx.drawImage(img, posIniX, 0, largSprite, altSprite, 0, 0, largSprite, altSprite);
+}
 
-    ctx.drawImage(zombie, posIniX, 0, largSprite, altSprite, posX, posY, largSprite, altSprite)}, 200);
+window.onload = function () {
+    let canvas = document.getElementById('jogoCanvas');
+    let ctx = canvas.getContext('2d');
+    let bgImg = new Image();
+    let zombie = new Image();
+    let numSprite = 0;
+    let posIniX = 0;
+    let altSprite = 0;
+    let largSprite = 0;
+    let numSpries = 4;
 
-/**window.addEventListener('keydown', (event)=>{
-    //seta para a esquerda
-    if(event.keyCode==37){
-        posX-=velocidade
-    }
-    //seta para a direita
-    else(event.keyCode==39){
-        posX+=velocidade
-    }
-    //seta para cima
-    if(event.keyCode==38){
-        posY-=velocidade
-    }
-    //seta para baixo
-    else(event.keyCode==40){
-        posY+=velocidade
-    }
-})**/
+    // Load fundo
+    bgImg.src = 'img/bg.jpg';
+    bgImg.onload = function() {
+        drawBackground(ctx, bgImg, canvas);
+    };
+
+    // Load imagem do zombie
+    zombie.src = "img/zombie.png";
+    zombie.addEventListener('load', () => {
+        largSprite = zombie.width / numSpries;
+        altSprite = zombie.height / numSpries;
+        posIniX = largSprite * numSprite;
+        drawSprite(ctx, zombie, posIniX, altSprite, largSprite, numSprite);
+    });
+
+    // tamanho de canva
+    window.addEventListener('resize', function () {
+        resizeCanvas(canvas);
+        drawBackground(ctx, bgImg, canvas);
+    });
+
+    // intervalo de animação
+    let anima = setInterval(() => {
+        drawSprite(ctx, zombie, posIniX, altSprite, largSprite, numSprite);
+        numSprite++;
+        if (numSprite > 3) numSprite = 0;
+        posIniX = largSprite * numSprite;
+    }, 200);
+};

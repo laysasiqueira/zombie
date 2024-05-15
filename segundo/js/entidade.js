@@ -1,7 +1,7 @@
 class Entidade {
     constructor() {
-        this.x = 0;//atributos
-        this.y = 0; 
+        this.x = 0;
+        this.y = 0;
         this.width = 0;
         this.height = 0;
         this.sprite = {
@@ -10,14 +10,14 @@ class Entidade {
         this.scale = 1;
     }
 
-    loadImage(loadHandler) {
+    loadImage(imgURL, loadHandler) {
         this.sprite.img = new Image();
         this.sprite.img.addEventListener("load", loadHandler);
-        this.sprite.img.src = this.sprite.imgURL;//callback
+        this.sprite.img.src = imgURL;
     }
 
-    update() { 
-        // por padrão vazio
+    update() {
+        // Default behavior, empty for now
     }
 }
 
@@ -37,7 +37,7 @@ class Zombie extends Entidade {
 class Pessoa extends Entidade {
     constructor() {
         super();
-        this.sprite.imgURL = "img/tilesheet.";
+        this.sprite.imgURL = "img/tilesheet."; // This seems incomplete in your original code
         this.sprite.sourceX = 64;
         this.sprite.sourceY = 0;
         this.sprite.sourceWidth = 64;
@@ -46,3 +46,4 @@ class Pessoa extends Entidade {
         this.height = 64;
     }
 }
+
