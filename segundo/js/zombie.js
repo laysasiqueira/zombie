@@ -1,25 +1,33 @@
-let canvas = document.getElementById('jogoCanvas');
-let ctx = canvas.getContext('2d');
+class Zombie extends Entidade {
+    constructor(spriteSheet, x, y, canvasWidth, canvasHeight) {
+        super();
+        this.spriteSheet = spriteSheet;
+        this.x = x;
+        this.y = y;
+        this.currentFrame = 0;
+        this.vx = 2;
+        this.vy = 2;
+        this.canvasWidth = canvasWidth;
+        this.canvasHeight = canvasHeight;
+        this.setup();
+    }
 
-let zombie = new Image();
-zombie.src = "img/zombie.png";
-let numSprite = 0;
-let posIniX = 0;
-let Limage = 0;
-let largSprite = 0;
-let numSpries = 4;
-zombie.addEventListener('load', ()=>{
-    largSprite = zombie.width / numSpries;
-    altSprite = zombie.height / numSpries;
-    posIniX = largSprite * numSprite;
-    ctx.drawImage(zombie, posIniX, 0, largSprite, altSprite, 0, 0, largSprite, altSprite)
-});
+    update(){
+        this.currentFrame=(++this.currentFrame)% this.frames.length;
+        this.width = this.frames[this.currentFrame].width;
+        this.height = this.frames[this.currentFrame].height;
+    }
 
-let anima = setInterval(()=>{
-    ctx.clearRect(0, 0, 100, 100);
-    numSprite++
-if(numSprite>3)
-    numSprite = 0
-posIniX = largSprite * numSprite;
+    getSprite() {
+        return this.frames[this.currentFrame];
+    }
 
-    ctx.drawImage(zombie, posIniX, 0, largSprite, altSprite, 0, 0, largSprite, altSprite)}, 200);
+    setup() {
+      this.frames = this.spriteSheet.getStats('ZOMBIE');
+      this.width = this.frames[0].width;
+      this.height = this.frames[0].height;
+    }
+
+}
+
+
