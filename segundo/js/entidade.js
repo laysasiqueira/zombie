@@ -24,7 +24,7 @@ class Entidade {
 class Zombie extends Entidade {
     constructor() {
         super();
-        this.sprite.imgURL = "images/zombie.jpg";
+        this.sprite.imgURL = "img/zombie.jpg";
         this.sprite.sourceX = 0;
         this.sprite.sourceY = 0;
         this.sprite.sourceWidth = 64;
@@ -37,7 +37,7 @@ class Zombie extends Entidade {
 class Pessoa extends Entidade {
     constructor() {
         super();
-        this.sprite.imgURL = "images/tilesheet.";
+        this.sprite.imgURL = "img/tilesheet.";
         this.sprite.sourceX = 64;
         this.sprite.sourceY = 0;
         this.sprite.sourceWidth = 64;
