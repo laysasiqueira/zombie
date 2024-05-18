@@ -1,33 +1,53 @@
 class Zombie extends Entidade {
-    constructor(spriteSheet, x, y, canvasWidth, canvasHeight) {
-        super();
-        this.spriteSheet = spriteSheet;
-        this.x = x;
-        this.y = y;
-        this.currentFrame = 0;
-        this.vx = 2;
-        this.vy = 2;
-        this.canvasWidth = canvasWidth;
-        this.canvasHeight = canvasHeight;
-        this.setup();
+    constructor(spriteSheet, x, y, width, height) {
+        super(spriteSheet, x, y, width, height);
+        this.frameIndex = 0;
+        this.frameCount = 16; // Assuming the spritesheet has 16 frames (4 columns * 4 rows)
+        this.ticksPerFrame = 5;
+        this.tickCount = 0;
+        this.onGround = true;
+        this.frameWidth = spriteSheet.width / 4; // Calculate frame width
+        this.frameHeight = spriteSheet.height / 4; // Calculate frame height
     }
 
-    update(){
-        this.currentFrame=(++this.currentFrame)% this.frames.length;
-        this.width = this.frames[this.currentFrame].width;
-        this.height = this.frames[this.currentFrame].height;
+    update() {
+        // Handle animation frame update
+        this.tickCount++;
+        if (this.tickCount > this.ticksPerFrame) {
+            this.tickCount = 0;
+            this.frameIndex = (this.frameIndex + 1) % this.frameCount;
+        }
+
+        // Apply gravity
+        if (!this.onGround) {
+            this.vy += gravity;
+            this.y += this.vy;
+
+            // Check if the zombie has landed on the ground
+            if (this.y >= canvas.height - 150) {
+                this.y = canvas.height - 150;
+                this.vy = 0;
+                this.onGround = true;
+                isJumping = false;
+            }
+        }
     }
 
-    getSprite() {
-        return this.frames[this.currentFrame];
+    draw(ctx) {
+        ctx.drawImage(
+            this.spriteSheet,
+            (this.frameIndex % 4) * this.frameWidth, Math.floor(this.frameIndex / 4) * this.frameHeight,
+            this.frameWidth, this.frameHeight,
+            this.x, this.y,
+            this.width, this.height
+        );
     }
 
-    setup() {
-      this.frames = this.spriteSheet.getStats('ZOMBIE');
-      this.width = this.frames[0].width;
-      this.height = this.frames[0].height;
+    jump() {
+        if (this.onGround) {
+            this.vy = -15; // initial jump velocity
+            this.onGround = false;
+            isJumping = true;
+        }
     }
-
 }
-
-
