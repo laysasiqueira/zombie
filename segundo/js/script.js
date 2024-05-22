@@ -1,5 +1,6 @@
 let entities = [];
 let spriteSheetZombie;
+let spriteSheetTank;
 let assetsLoaded = 0;
 let canvas;
 let ctx;
@@ -55,6 +56,14 @@ function init() {
         let zombie = new Zombie(spriteSheetZombie, 100, canvas.height - 150, 80, 100);
         entities.push(zombie);
     };
+
+    spriteSheetTank = new Image();
+    spriteSheetTank.src = 'img/tank.png';
+    spriteSheetTank.onload = function() {
+        let tank = new Tank (spriteSheetTank, 500, canvas.height-120, 150, 150);
+        entities.push(tank);
+    }
+
 }
 
 function handleKeyDown(event) {
