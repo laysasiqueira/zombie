@@ -1,87 +1,53 @@
-class Tank extends Entidade
-{
-  constructor(spriteSheet, x, y, canvasWidth, canvasHeight) {
-    super();
-    this.states = {
-      MOVE: 'MOVE',
-      SHOOT: 'SHOOT',
-      STOPPED: 'STOPPED',
-      HIT: 'HIT'
-    };
-
-    this.direction = {
-      LEFT: 'LEFT',
-      RIGHT: 'RIGHT',
-      UP: 'UP',
-      DOWN: 'DOWN'
-    }
-
-    this.spriteSheet = spriteSheet;
-    this.x = x;
-    this.y = y;
-    this.currentState = this.states.STOPPED;
-    this.currentFrame = 0;
-    this.vx = 2;
-    this.vy = 2;
-    this.canvasWidth = canvasWidth;
-    this.canvasHeight = canvasHeight;
-    this.setup();
+class Tank extends Entidade {
+  constructor(spriteSheet, x, y, width, height) {
+    super(spriteSheet, x, y, width, height);
+    this.frameIndex = 0;
+    this.frameCount = 16; // Assuming the spritesheet has 16 frames (4 columns * 4 rows)
+    this.ticksPerFrame = 5;
+    this.tickCount = 0;
+    this.onGround = true;
+    this.frameWidth = spriteSheet.width / 4; // Calculate frame width
+    this.frameHeight = spriteSheet.height / 4; // Calculate frame height
   }
-  
+
   update() {
-	  this.currentFrame = (++this.currentFrame) % this.frames.length;
-    this.width = this.frames[this.currentFrame].width;
-    this.height = this.frames[this.currentFrame].height;
-  }
-  
-  getSprite() {
-	  return this.frames[this.currentFrame];
-  }
-  
-  setup() {
-	  this.eStates.MOVE = this.spriteSheet.getStats('ANDAR');
-    this.eStates.SHOOT = this.spriteSheet.getStats('DISPARAR');
-    this.eStates.STOPPED = this.spriteSheet.getStats('PARADO');
-    this.eStates.HIT = this.spriteSheet.getStats('ATINGIDO');
+    // Handle animation frame update
+    this.tickCount++;
+    if (this.tickCount > this.ticksPerFrame) {
+      this.tickCount = 0;
+      this.frameIndex = (this.frameIndex + 1) % this.frameCount;
+    }
 
-    this.frames = this.eStates[this.currentState];
-    this.width = this.frames[0].width;
-    this.height = this.frames[0].height;
-  }
-  
-  move(direction) {
-    this.toggleState(this.states.MOVE);
-    
-    switch (direction)
-    {
-      case this.direction.LEFT:
-        this.x -= this.x - this.vx >= 0 ? this.vx : 0;
-        break;
-      case this.direction.RIGHT:
-        this.x += this.x + this.vx <= this.canvasWidth - this.width ? this.vx : 0;
-        break;
-      case this.direction.UP:
-        this.y -= this.y - this.vy >= 0 ? this.vy : 0;
-        break;
-      case this.direction.DOWN:
-        this.y += this.y + this.vy <= this.canvasHeight - this.height ? this.vy : 0;
-        break;
+    // Apply gravity
+    if (!this.onGround) {
+      this.vy += gravity;
+      this.y += this.vy;
+
+      // Check if the zombie has landed on the ground
+      if (this.y >= canvas.height - 150) {
+        this.y = canvas.height - 150;
+        this.vy = 0;
+        this.onGround = true;
+        isJumping = false;
+      }
     }
   }
-  
-  stop() {
-    this.toggleState(this.states.STOPPED);
-  }
-  
-  shoot() {
-    this.toggleState(this.states.SHOOT);
+
+  draw(ctx) {
+    ctx.drawImage(
+      this.spriteSheet,
+      (this.frameIndex % 4) * this.frameWidth, Math.floor(this.frameIndex / 4) * this.frameHeight,
+      this.frameWidth, this.frameHeight,
+      this.x, this.y,
+      this.width, this.height
+    );
   }
 
-  toggleState(newState) {
-    if (this.currentState === newState)
-      return;
-    this.currentState = newState;
-    this.frames = this.eStates[this.currentState];
-    this.currentFrame = 0;
-  } 
+  jump() {
+    if (this.onGround) {
+      this.vy = -15; // initial jump velocity
+      this.onGround = false;
+      isJumping = true;
+    }
+  }
 }

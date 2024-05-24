@@ -1,3 +1,4 @@
+// Zombie.js
 class Zombie extends Entidade {
     constructor(spriteSheet, x, y, width, height) {
         super(spriteSheet, x, y, width, height);

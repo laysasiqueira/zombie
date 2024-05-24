@@ -3,6 +3,9 @@ let spriteSheetZombie;
 let spriteSheetTank;
 let assetsLoaded = 0;
 let canvas;
+let zombie;
+let tank;
+let backG;
 let ctx;
 let bgX = 0; // posição inicial do fundo
 let bgSpeed = 2; // velocidade do scrolling
@@ -19,6 +22,22 @@ function init() {
     //  tamanho de window
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+
+    // Load zombie spritesheet
+    spriteSheetZombie = new Image();
+    spriteSheetZombie.src = 'img/zombie.png';
+    spriteSheetZombie.onload = function () {
+        let zombie = new Zombie(spriteSheetZombie, 100, canvas.height - 150, 80, 100);
+        entities.push(zombie);
+    };
+
+    spriteSheetTank = new Image();
+    spriteSheetTank.src = 'img/tank.png';
+    spriteSheetTank.onload = function() {
+        let tank = new Tank (spriteSheetTank, 500, canvas.height-120, 150, 150);
+        entities.push(tank);
+    }
+
 
     // elemento do fundo
     let backG = new Image();
@@ -49,20 +68,7 @@ function init() {
         draw();
     };
 
-    // Load zombie spritesheet
-    spriteSheetZombie = new Image();
-    spriteSheetZombie.src = 'img/zombie.png';
-    spriteSheetZombie.onload = function () {
-        let zombie = new Zombie(spriteSheetZombie, 100, canvas.height - 150, 80, 100);
-        entities.push(zombie);
-    };
-
-    spriteSheetTank = new Image();
-    spriteSheetTank.src = 'img/tank.png';
-    spriteSheetTank.onload = function() {
-        let tank = new Tank (spriteSheetTank, 500, canvas.height-120, 150, 150);
-        entities.push(tank);
-    }
+    
 
 }
 
