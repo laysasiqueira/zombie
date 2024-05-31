@@ -1,17 +1,18 @@
-class Stone extends Entidade {
+class Obstacle {
     constructor(image, x, y, width, height) {
-        super(image, x, y, width, height);
+        this.image = image;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.speed = 2;
     }
 
     update() {
-        // update stone logic, if any
+        this.x -= this.speed;
     }
 
     draw(ctx) {
-        ctx.save();
-        ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
-        ctx.rotate((this.rotation * Math.PI) / 180);
-        ctx.drawImage(this.spriteSheet, -this.width / 2, -this.height / 2, this.width, this.height);
-        ctx.restore();
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     }
 }

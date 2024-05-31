@@ -14,7 +14,7 @@ class Entidade {
     }
 
     draw(ctx) {
-                // por padrão vazio 
+        // por padrão vazio
     }
 }
 

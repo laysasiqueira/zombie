@@ -1,25 +1,23 @@
-class Tank extends Entidade {
-    constructor(spriteSheet, x, y, width, height) {
-        super(spriteSheet, x, y, width, height);
-        this.vx = -2; // horizontal velocity
+class Tank {
+    constructor(sprite, x, y) {
+        this.sprite = sprite;
+        this.x = x;
+        this.y = y;
+        this.width = 80; // Adjust width based on your tank sprite
+        this.height = 50; // Adjust height based on your tank sprite
+        this.speed = 5; // Adjust tank speed
     }
 
     update() {
-        this.x += this.vx;
-
-        // Check if tank collides with zombie
-        for (let i = entities.length - 1; i >= 0; i--) {
-            let entity = entities[i];
-            if (entity instanceof Zombie) {
-                if (isColliding(this, entity)) {
-                    // Game over
-                    gameOver();
-                }
-            }
+        this.x -= this.speed;
+        // Remove tank when it goes off-screen
+        if (this.x + this.width < 0) {
+            entities.splice(entities.indexOf(this), 1);
+            tank = null; // Reset the tank variable
         }
     }
 
     draw(ctx) {
-        ctx.drawImage(this.spriteSheet, this.x, this.y, this.width, this.height);
+        ctx.drawImage(this.sprite, this.x, this.y, this.width, this.height);
     }
 }

@@ -1,6 +1,7 @@
 let entities = [];
 let spriteSheetZombie;
 let spritePerson1;
+let spriteObstacle;
 let canvas;
 let ctx;
 let bgX = 0; // posição inicial do fundo
@@ -72,6 +73,13 @@ function init() {
         spawnPeople();
         setInterval(spawnPeople, 10000); // Spawn people every 10 seconds
     };
+
+    // obstacle image
+    spriteObstacle = new Image();
+    spriteObstacle.src = 'img/pedra.png';
+    spriteObstacle.onload = function () {
+        setInterval(spawnObstacle, 5000); // Spawn obstacle every 5 seconds
+    };
 }
 
 function handleKeyDown(event) {
@@ -104,6 +112,16 @@ function spawnPeople() {
     }
 }
 
+function spawnObstacle() {
+    let obstacleWidth = 70; // Same width as the person
+    let obstacleHeight = 70; // Same height as the person
+    let obstacleX = canvas.width;
+    let obstacleY = canvas.height - 115 - obstacleHeight; // Adjusted to be on the ground and same level as person
+
+    let obstacle = new Obstacle(spriteObstacle, obstacleX, obstacleY, obstacleWidth, obstacleHeight);
+    entities.push(obstacle);
+}
+
 function checkCollisions() {
     for (let i = entities.length - 1; i >= 0; i--) {
         let entity = entities[i];
@@ -122,7 +140,27 @@ function checkCollisions() {
                     }
                 }
             }
+        } else if (entity instanceof Obstacle) {
+            for (let j = 0; j < entities.length; j++) {
+                let zombie = entities[j];
+                if (zombie instanceof Zombie) {
+                    if (isColliding(zombie, entity)) {
+                        // Stop zombie from running if it collides with obstacle
+                        zombie.stopRunning();
+                        if (!zombie.isJumping) {
+                            // If zombie is not already jumping, move it to the top of the obstacle
+                            zombie.y = entity.y - zombie.height;
+                        }
+                        break;
+                    }
+                }
+            }
         }
+    }
+
+    // If level is "Medium" and number of zombies is more than 4, merge them into one big zombie
+    if (document.getElementById('level-select').value === 'Medium' && numberOfZombies > 4) {
+        mergeZombies();
     }
 }
 
@@ -141,3 +179,20 @@ function displayScoreAndZombies() {
     ctx.fillText('Score: ' + score, 20, 30);
     ctx.fillText('Zombies: ' + numberOfZombies, 20, 60);
 }
+
+function mergeZombies() {
+    let mergedZombieX = canvas.width / 2;
+    let mergedZombieY = canvas.height - 120;
+    let mergedZombieWidth = 160; // Increased size
+    let mergedZombieHeight = 200; // Increased size
+
+    // Remove existing zombies
+    entities = entities.filter(entity => !(entity instanceof Zombie));
+
+     // Add one big zombie
+     let bigZombie = new Zombie(spriteSheetZombie, mergedZombieX, mergedZombieY, mergedZombieWidth, mergedZombieHeight);
+     entities.push(bigZombie);
+ 
+     // Reset number of zombies
+     numberOfZombies = 1;
+ }
