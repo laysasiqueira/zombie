@@ -3,17 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel = "stylesheet" href = "css/style.css">
+    <title>Zombie Run</title>
+    <link rel="stylesheet" href="css/principal.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <canvas id="jogoCanvas" width=window height="600"></canvas>
+    <div id="principal-container" class="container">
+        <h1>Zombie Run</h1>
+        <div class="button-group">
+            <select id="level-select" onchange="selectLevel()">
+                <option value="" disabled selected>Nível</option>
+                <option value="Easy">Fácil</option>
+                <option value="Medium">Médio</option>
+            </select>
+            <button onclick="showRules()">Regras do jogo</button>
+            <button onclick="toggleSound()">
+                <img id="sound-icon" src="img/soundON.png">
+            </button><br>
+            <button onclick="initGame()">Iniciar</button>
+        </div>
+        <div id="message"></div>
+        <audio id="background-music" loop>
+            <source src="mp3/som.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
     
-    <script src="js/spritesheet.js"></script>
+    <div id="game-container" style="display:none;">
+        <canvas id="jogoCanvas" width="800" height="600"></canvas>
+    </div>
+    
+    <script src="js/principal.js"></script>
     <script src="js/entidade.js"></script>
     <script src="js/zombie.js"></script>
-    <script src="js/tank.js"></script>
     <script src="js/pessoa.js"></script>
     <script src="js/script.js"></script>
+    <script>
+        function initGame() {
+            document.getElementById('principal-container').style.display = 'none';
+            document.getElementById('game-container').style.display = 'block';
+            // Initialize game script functions if needed
+        }
+    </script>
 </body>
 </html>

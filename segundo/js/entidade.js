@@ -10,11 +10,11 @@ class Entidade {
     }
 
     update() {
-        // Override this method in subclasses for specific behavior
+        // por padrão vazio
     }
 
     draw(ctx) {
-        // Override this method in subclasses to draw the entity
+                // por padrão vazio 
     }
 }
 

@@ -1,0 +1,50 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('../img/bg.jpg');
+    background-size: cover;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+    background-color: rgba(234, 180, 239, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.button-group {
+    margin: 20px;
+}
+
+.button-group button,
+.button-group select {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    background-color: #9a92e5;
+}
+
+.button-group button:hover,
+.button-group select:hover {
+    background-color: #c2f3e3;
+}
+
+#sound-icon {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+}
+
+#message {
+    margin-top: 20px;
+    font-size: 18px;
+}

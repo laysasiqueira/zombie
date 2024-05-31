@@ -1,16 +1,14 @@
 let entities = [];
 let spriteSheetZombie;
-let spriteSheetTank;
-let assetsLoaded = 0;
+let spritePerson1;
 let canvas;
-let zombie;
-let tank;
-let backG;
 let ctx;
 let bgX = 0; // posição inicial do fundo
 let bgSpeed = 2; // velocidade do scrolling
-let gravity = 0.5; // gravity force
+let gravity = 0.5;
 let isJumping = false;
+let score = 0; // Score variable
+let numberOfZombies = 0; // Number of zombies variable
 
 window.addEventListener("load", init, false);
 window.addEventListener("keydown", handleKeyDown, false);
@@ -19,25 +17,9 @@ function init() {
     canvas = document.getElementById('jogoCanvas');
     ctx = canvas.getContext('2d');
 
-    //  tamanho de window
+    // tamanho de window
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-
-    // Load zombie spritesheet
-    spriteSheetZombie = new Image();
-    spriteSheetZombie.src = 'img/zombie.png';
-    spriteSheetZombie.onload = function () {
-        let zombie = new Zombie(spriteSheetZombie, 100, canvas.height - 150, 80, 100);
-        entities.push(zombie);
-    };
-
-    spriteSheetTank = new Image();
-    spriteSheetTank.src = 'img/tank.png';
-    spriteSheetTank.onload = function() {
-        let tank = new Tank (spriteSheetTank, 500, canvas.height-120, 150, 150);
-        entities.push(tank);
-    }
-
 
     // elemento do fundo
     let backG = new Image();
@@ -60,6 +42,12 @@ function init() {
                 entity.draw(ctx);
             });
 
+            // check collisions
+            checkCollisions();
+
+            // Display score and number of zombies
+            displayScoreAndZombies();
+
             // para criar loop
             requestAnimationFrame(draw);
         }
@@ -68,8 +56,22 @@ function init() {
         draw();
     };
 
-    
+    // zombie spritesheet
+    spriteSheetZombie = new Image();
+    spriteSheetZombie.src = 'img/zombie.png';
+    spriteSheetZombie.onload = function () {
+        let zombie = new Zombie(spriteSheetZombie, 100, canvas.height - 120, 80, 100);
+        entities.unshift(zombie); // Add zombie to the beginning of the array
+        numberOfZombies++; // Increment number of zombies
+    };
 
+    // person images
+    spritePerson1 = new Image();
+    spritePerson1.src = 'img/boy.png';
+    spritePerson1.onload = function () {
+        spawnPeople();
+        setInterval(spawnPeople, 10000); // Spawn people every 10 seconds
+    };
 }
 
 function handleKeyDown(event) {
@@ -80,4 +82,62 @@ function handleKeyDown(event) {
             }
         });
     }
+}
+
+function spawnPeople() {
+    let randomSpawn = Math.floor(Math.random() * 3); // 0, 1, or 2
+    let personWidth = 70; // Decreased size
+    let personHeight = 70; // Decreased size
+    let yPosition = canvas.height - 115; // Adjusted to smaller height
+
+    if (randomSpawn === 0) {
+        let person1 = new Person(spritePerson1, canvas.width, yPosition, personWidth, personHeight);
+        entities.push(person1);
+    } else if (randomSpawn === 1) {
+        let person1 = new Person(spritePerson1, canvas.width - 100, yPosition, personWidth, personHeight);
+        entities.push(person1);
+    } else if (randomSpawn === 2) {
+        let person1 = new Person(spritePerson1, canvas.width, yPosition, personWidth, personHeight);
+        let person2 = new Person(spritePerson1, canvas.width - 100, yPosition, personWidth, personHeight);
+        entities.push(person1);
+        entities.push(person2);
+    }
+}
+
+function checkCollisions() {
+    for (let i = entities.length - 1; i >= 0; i--) {
+        let entity = entities[i];
+        if (entity instanceof Person) {
+            for (let j = 0; j < entities.length; j++) {
+                let zombie = entities[j];
+                if (zombie instanceof Zombie) {
+                    if (isColliding(zombie, entity)) {
+                        // Remove person and add a new zombie
+                        entities.splice(i, 1);
+                        let newZombie = new Zombie(spriteSheetZombie, entity.x, entity.y, 80, 100);
+                        entities.push(newZombie);
+                        score += 5; // Increase score by 5 points
+                        numberOfZombies++; // Increment number of zombies
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+function isColliding(zombie, person) {
+    return !(
+        zombie.x + zombie.width < person.x ||
+        zombie.x > person.x + person.width ||
+        zombie.y + zombie.height < person.y ||
+        zombie.y > person.y + person.height
+    );
+}
+
+function displayScoreAndZombies() {
+    ctx.font = '24px Arial';
+    ctx.fillStyle = 'white';
+    ctx.fillText('Score: ' + score, 20, 30);
+    ctx.fillText('Zombies: ' + numberOfZombies, 20, 60);
 }
